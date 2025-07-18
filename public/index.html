@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cyber Battleground - Home</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body.home-green {
+            background: linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%);
+        }
+        .home-container {
+            max-width: 700px;
+            margin: 4em auto;
+            padding: 3em 2em;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(56, 142, 60, 0.12);
+            text-align: center;
+        }
+        .home-title {
+            font-size: 2.7em;
+            color: #388e3c;
+            margin-bottom: 0.5em;
+            font-weight: 700;
+        }
+        .home-desc {
+            font-size: 1.3em;
+            color: #388e3c;
+            margin-bottom: 2.5em;
+        }
+        .home-cards {
+            display: flex;
+            gap: 2em;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .home-card {
+            flex: 1 1 200px;
+            min-width: 220px;
+            background: #e8f5e9;
+            border: 2px solid #66bb6a;
+            border-radius: 14px;
+            padding: 2em 1.5em;
+            box-shadow: 0 2px 12px rgba(56, 142, 60, 0.08);
+            transition: transform 0.15s, box-shadow 0.15s;
+            cursor: pointer;
+        }
+        .home-card:hover {
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 0 8px 32px rgba(56, 142, 60, 0.18);
+            background: #c8e6c9;
+        }
+        .home-card-title {
+            font-size: 1.4em;
+            color: #388e3c;
+            font-weight: 600;
+            margin-bottom: 0.7em;
+        }
+        .home-card-desc {
+            color: #388e3c;
+            font-size: 1em;
+        }
+        @media (max-width: 700px) {
+            .home-cards { flex-direction: column; gap: 1.5em; }
+        }
+    </style>
+</head>
+<body class="home-green">
+    <div class="home-container">
+        <div class="home-title">Cyber Battleground</div>
+        <div class="home-desc">A hands-on platform to learn, attack, and defend real-world web vulnerabilities.<br>Choose your mission:</div>
+        <div class="home-cards">
+            <div class="home-card" onclick="window.open('/login.html', '_blank')">
+                <div class="home-card-title">Vulnerable Website</div>
+                <div class="home-card-desc">Explore and exploit classic web vulnerabilities in a safe environment.</div>
+            </div>
+            <div class="home-card" onclick="window.open('/attack.html', '_blank')">
+                <div class="home-card-title">Attack Dashboard</div>
+                <div class="home-card-desc">Launch automated attacks and test your offensive skills.</div>
+            </div>
+            <div class="home-card" onclick="window.open('/defense.html', '_blank')">
+                <div class="home-card-title">Defense Dashboard</div>
+                <div class="home-card-desc">Monitor, detect, and respond to threats like a blue team pro.</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

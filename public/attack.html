@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attack Dashboard - Cyber Battleground</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .main-topnav {
+            width: 100vw;
+            background: #263238;
+            color: #fff;
+            padding: 0.7em 0;
+            text-align: center;
+            font-size: 1.1em;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .main-topnav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 2em;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .main-topnav a:hover {
+            color: #ffb347;
+        }
+        body {
+            background: #181a20;
+            color: #ff4500;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            padding-top: 3.2em;
+        }
+        .attack-dash-container {
+            max-width: 1200px;
+            margin: 3em auto 2em auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2em;
+            justify-content: center;
+        }
+        .attack-card {
+            background: #23242a;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(44,62,80,0.10);
+            padding: 2em 1.5em 1.5em 1.5em;
+            min-width: 320px;
+            max-width: 350px;
+            flex: 1 1 320px;
+            margin-bottom: 1em;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .attack-card h3 {
+            color: #ff4500;
+            margin-bottom: 0.7em;
+            font-size: 1.2em;
+            text-shadow: none;
+        }
+        .attack-card button, .auto-btn {
+            background: #ff4500;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1em;
+            font-weight: 700;
+            padding: 0.7em 1.2em;
+            margin-top: 0.5em;
+            margin-right: 0.5em;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s;
+            cursor: pointer;
+        }
+        .attack-card button:hover, .auto-btn:hover {
+            background: #fff;
+            color: #ff4500;
+        }
+        .auto-btn {
+            background: #23242a;
+            color: #ff4500;
+            border: 2px solid #ff4500;
+            margin-left: 0;
+            margin-top: 0.5em;
+            font-weight: 600;
+        }
+        .auto-btn:active {
+            background: #ff4500;
+            color: #fff;
+        }
+        input, textarea {
+            background: #181818;
+            color: #ff4500;
+            border: 1px solid #ff4500;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1em;
+            margin-bottom: 0.5em;
+        }
+        form {
+            margin-bottom: 0.5em;
+        }
+        #sqli-result, #brute-result, #xss-result, #upload-result, #cmd-result {
+            color: #fff;
+            background: #2d2d2d;
+            border-left: 4px solid #ff4500;
+            padding: 0.7em 1em;
+            border-radius: 6px;
+            margin-top: 0.5em;
+            font-size: 0.98em;
+            word-break: break-all;
+        }
+        @media (max-width: 900px) {
+            .attack-dash-container { flex-direction: column; gap: 1.5em; }
+            .attack-card { max-width: 100%; min-width: 0; }
+        }
+    </style>
+</head>
+<body class="attack-reddit">
+    <div class="main-topnav">
+        <a href="/login.html">Vulnerable Website</a>
+        <a href="/attack.html">Attack Dashboard</a>
+        <a href="/defense.html">Defense Dashboard</a>
+    </div>
+    <div class="attack-dash-container">
+        <div class="attack-card">
+            <h3>SQL Injection</h3>
+            <form id="sqli-form">
+                <input type="text" name="username" placeholder="Username payload" required>
+                <input type="text" name="password" placeholder="Password payload" required>
+                <button type="submit">Launch SQLi</button>
+                <button type="button" class="auto-btn" data-type="sqli">Auto Attack</button>
+                <div id="sqli-result"></div>
+            </form>
+        </div>
+        <div class="attack-card">
+            <h3>Brute-force Login</h3>
+            <form id="brute-form">
+                <input type="text" name="username" placeholder="Target username" required>
+                <textarea name="passwords" placeholder="Password list (one per line)" required></textarea>
+                <button type="submit">Launch Brute-force</button>
+                <button type="button" class="auto-btn" data-type="brute">Auto Attack</button>
+                <div id="brute-result"></div>
+            </form>
+        </div>
+        <div class="attack-card">
+            <h3>XSS Injection</h3>
+            <form id="xss-form">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="text" name="payload" placeholder="XSS payload" required>
+                <button type="submit">Launch XSS</button>
+                <button type="button" class="auto-btn" data-type="xss">Auto Attack</button>
+                <div id="xss-result"></div>
+            </form>
+        </div>
+        <div class="attack-card">
+            <h3>Malicious File Upload</h3>
+            <form id="upload-form" enctype="multipart/form-data">
+                <input type="file" name="file" required>
+                <button type="submit">Upload File</button>
+                <button type="button" class="auto-btn" data-type="upload">Auto Attack</button>
+                <div id="upload-result"></div>
+            </form>
+        </div>
+        <div class="attack-card">
+            <h3>Command Injection</h3>
+            <form id="cmd-form">
+                <input type="text" name="input" placeholder="Command input" required>
+                <button type="submit">Launch Command Injection</button>
+                <button type="button" class="auto-btn" data-type="cmd">Auto Attack</button>
+                <div id="cmd-result"></div>
+            </form>
+        </div>
+    </div>
+    <script src="/attack.js"></script>
+    <script>
+    // Ensure autoAttack only fires on explicit user click and disables button after click
+    function autoAttack(type, btn) {
+        if (btn) {
+            btn.disabled = true;
+            setTimeout(() => { btn.disabled = false; }, 2000);
+        }
+        if(type === 'sqli') {
+            document.querySelector('#sqli-form [name=username]').value = "admin' --";
+            document.querySelector('#sqli-form [name=password]').value = "irrelevant";
+            document.getElementById('sqli-form').requestSubmit();
+        } else if(type === 'brute') {
+            document.querySelector('#brute-form [name=username]').value = "admin";
+            document.querySelector('#brute-form [name=passwords]').value = "password123\nadmin\nletmein\n123456";
+            document.getElementById('brute-form').requestSubmit();
+        } else if(type === 'xss') {
+            document.querySelector('#xss-form [name=username]').value = "attacker";
+            document.querySelector('#xss-form [name=payload]').value = "<img src=x onerror=alert('XSS')>";
+            document.getElementById('xss-form').requestSubmit();
+        } else if(type === 'upload') {
+            alert('Auto file upload requires manual file selection for security reasons.');
+        } else if(type === 'cmd') {
+            document.querySelector('#cmd-form [name=input]').value = "test; whoami";
+            document.getElementById('cmd-form').requestSubmit();
+        }
+    }
+    // Attach to buttons
+    document.querySelectorAll('.auto-btn').forEach(btn => {
+        btn.onclick = function() { autoAttack(this.getAttribute('data-type'), this); };
+    });
+    // No attacks are launched automatically on page load or without user action.
+    </script>
+</body>
+</html> 

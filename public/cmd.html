@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Command Injection - Cyber Battleground</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .main-topnav {
+            width: 100vw;
+            background: #263238;
+            color: #fff;
+            padding: 0.7em 0;
+            text-align: center;
+            font-size: 1.1em;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .main-topnav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 2em;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .main-topnav a:hover {
+            color: #ffb347;
+        }
+        body { padding-top: 3.2em; }
+        .container.vuln-flex {
+            min-width: 700px;
+            display: flex;
+            gap: 2.5em;
+            align-items: flex-start;
+            padding: 2.5em 2em;
+        }
+        .form-side {
+            flex: 1;
+            min-width: 260px;
+            max-width: 420px;
+        }
+        .vuln-explanation-card {
+            background: #fffde7;
+            border-left: 6px solid #ffb300;
+            padding: 1.2em 1em;
+            border-radius: 8px;
+            color: #795548;
+            font-size: 1.08em;
+            min-width: 320px;
+            max-width: 400px;
+            box-shadow: 0 2px 12px rgba(255, 193, 7, 0.08);
+        }
+        .vuln-explanation-card code {
+            background: #f5f5f5;
+            color: #c62828;
+            padding: 0.1em 0.3em;
+            border-radius: 4px;
+        }
+        .vuln-warning {
+            background: #ffebee;
+            color: #b71c1c;
+            text-align: center;
+            font-weight: bold;
+            padding: 0.7em 0.5em;
+            border-bottom: 2px solid #b71c1c;
+            letter-spacing: 1px;
+            font-size: 1.08em;
+        }
+        @media (max-width: 1100px) {
+            .container.vuln-flex { flex-direction: column; min-width: 0; max-width: 98vw; }
+            .vuln-explanation-card { max-width: 100%; min-width: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-topnav">
+        <a href="/login.html">Vulnerable Website</a>
+        <a href="/attack.html">Attack Dashboard</a>
+        <a href="/defense.html">Defense Dashboard</a>
+    </div>
+    <div class="vuln-warning">WARNING: THIS WEBSITE IS INTENTIONALLY VULNERABLE.</div>
+    <nav>
+        <a href="/login.html">Login</a> |
+        <a href="/comments.html">Comments</a> |
+        <a href="/upload.html">File Upload</a> |
+        <a href="/cmd.html">Command Injection</a>
+    </nav>
+    <div class="container vuln-flex">
+        <div class="form-side">
+            <h2>Command Injection <br><span style="font-size:0.7em;font-weight:400;color:#b71c1c;">(Vulnerable to Command Injection)</span></h2>
+            <form action="/cmd" method="POST">
+                <input type="text" name="input" placeholder="Enter input" required>
+                <button type="submit">Run</button>
+            </form>
+            <hr>
+            <div id="cmd-output">
+                <!-- Command output will be rendered here by the server -->
+            </div>
+        </div>
+        <div class="vuln-explanation-card">
+            <strong>Vulnerability: Command Injection</strong><br><br>
+            <b>What is it?</b> Command injection occurs when user input is passed directly to a system shell or command interpreter. Attackers can execute arbitrary commands on the server.<br><br>
+            <b>How does it work here?</b> This form passes your input directly to a shell command. For example, entering <code>hello &amp;&amp; whoami</code> will run <code>echo hello &amp;&amp; whoami</code> on the server.<br><br>
+            <b>Example Attack:</b><br>
+            Enter <code>test &amp;&amp; dir</code> (Windows) or <code>test; ls</code> (Linux) to list files on the server.<br><br>
+            <b>Mitigation Strategies:</b>
+            <ul>
+                <li>Never pass user input directly to shell commands.</li>
+                <li>Use safe APIs (e.g., <code>child_process.spawn</code> with argument arrays).</li>
+                <li>Validate and sanitize all user input.</li>
+                <li>Run services with least privilege.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 

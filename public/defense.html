@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Defense Dashboard - Cyber Battleground</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .main-topnav {
+            width: 100vw;
+            background: #263238;
+            color: #fff;
+            padding: 0.7em 0;
+            text-align: center;
+            font-size: 1.1em;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .main-topnav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 2em;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .main-topnav a:hover {
+            color: #ffb347;
+        }
+        body { padding-top: 3.2em; }
+        body.defense-blue {
+            background: linear-gradient(135deg, #e3f2fd 0%, #90caf9 100%);
+            color: #0d47a1;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .defense-container {
+            max-width: 1200px;
+            margin: 3em auto 2em auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2em;
+            justify-content: center;
+        }
+        .def-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(13, 71, 161, 0.10);
+            padding: 2em 1.5em 1.5em 1.5em;
+            min-width: 320px;
+            max-width: 500px;
+            flex: 1 1 350px;
+            margin-bottom: 1em;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .def-card h3 {
+            color: #1976d2;
+            margin-bottom: 0.7em;
+            font-size: 1.2em;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #43a047;
+            border-radius: 50%;
+            margin-right: 0.5em;
+            box-shadow: 0 0 8px #43a047;
+        }
+        .def-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5em;
+        }
+        .def-table th, .def-table td {
+            border-bottom: 1px solid #bbdefb;
+            padding: 0.6em 0.8em;
+            text-align: left;
+        }
+        .def-table th {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .def-table tr:nth-child(even) { background: #f5fafd; }
+        .def-table tr:nth-child(odd) { background: #e3f2fd; }
+        .attack-list li, .blocked-list li {
+            background: #e3f2fd;
+            color: #0d47a1;
+            border-left: 4px solid #1976d2;
+            margin-bottom: 0.5em;
+            padding: 0.5em 1em;
+            border-radius: 6px;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .blocked-list li {
+            background: #bbdefb;
+        }
+        .block-btn, .unblock-btn {
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 600;
+            padding: 0.4em 1em;
+            margin-left: 1em;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .block-btn:hover, .unblock-btn:hover {
+            background: #fff;
+            color: #1976d2;
+        }
+        .live-status {
+            font-size: 1em;
+            margin-bottom: 1em;
+            color: #1976d2;
+            font-weight: 600;
+        }
+        .localhost-ip {
+            background: #fff3e0 !important;
+            color: #b71c1c !important;
+            border-left: 4px solid #ff9800 !important;
+            font-weight: 700;
+        }
+        .localhost-note {
+            background: #fffde7;
+            color: #b71c1c;
+            border-left: 6px solid #ffb300;
+            padding: 0.7em 1em;
+            border-radius: 8px;
+            margin: 1.5em auto 0.5em auto;
+            max-width: 900px;
+            font-size: 1.08em;
+            text-align: center;
+        }
+        .attack-row {
+            background: #ffebee !important;
+            color: #b71c1c !important;
+            font-weight: 700;
+        }
+        .attack-dot {
+            background: #b71c1c !important;
+            border: 2px solid #fff !important;
+        }
+        .show-more-btn {
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 600;
+            padding: 0.4em 1em;
+            margin: 0.5em 0;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .show-more-btn:hover {
+            background: #fff;
+            color: #1976d2;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(44,62,80,0.25);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2em;
+            max-width: 900px;
+            width: 95vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(13, 71, 161, 0.18);
+        }
+        .modal-close {
+            float: right;
+            font-size: 1.5em;
+            color: #1976d2;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        @media (max-width: 900px) {
+            .defense-container { flex-direction: column; gap: 1.5em; }
+            .def-card { max-width: 100%; min-width: 0; }
+        }
+    </style>
+</head>
+<body class="defense-blue">
+    <div class="main-topnav">
+        <a href="/login.html">Vulnerable Website</a>
+        <a href="/attack.html">Attack Dashboard</a>
+        <a href="/defense.html">Defense Dashboard</a>
+    </div>
+    <div class="localhost-note">Note: On <b>localhost</b>, all attacks will appear from <b>127.0.0.1</b> or <b>::1</b>.</div>
+    <div class="defense-container">
+        <div class="def-card">
+            <div class="live-status"><span class="status-indicator"></span>Live Monitoring Active</div>
+            <h3>Live Requests Per Minute</h3>
+            <canvas id="req-chart" width="350" height="120"></canvas>
+        </div>
+        <div class="def-card">
+            <h3>Recent Requests</h3>
+            <table class="def-table" id="req-table">
+                <thead>
+                    <tr><th>Time</th><th>IP</th><th>Endpoint</th><th>Method</th><th>Body</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button class="show-more-btn" onclick="showModal()">Show More</button>
+        </div>
+        <div class="def-card">
+            <h3>Detected Attacks</h3>
+            <button class="show-more-btn" id="clear-attacks-btn" style="margin-bottom:1em;background:#b71c1c;color:#fff;">Clear Detections</button>
+            <ul class="attack-list" id="attack-list"></ul>
+        </div>
+        <div class="def-card">
+            <h3>Blocked IPs</h3>
+            <ul class="blocked-list" id="blocked-list"></ul>
+        </div>
+    </div>
+    <div class="modal" id="req-modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h3>All Recent Requests</h3>
+            <table class="def-table" id="modal-req-table">
+                <thead>
+                    <tr><th>Time</th><th>IP</th><th>Endpoint</th><th>Method</th><th>Body</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/defense.js"></script>
+    <script>
+    // Add block button to each detected attack IP
+    async function blockIP(ip) {
+        await fetch('/api/blocked', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ip })
+        });
+        renderBlocked();
+    }
+    // Patch renderAttacks to add block button and highlight localhost
+    const origRenderAttacks = window.renderAttacks;
+    window.renderAttacks = async function() {
+        const attacks = await fetch('/api/attacks').then(r => r.json());
+        const ul = document.getElementById('attack-list');
+        ul.innerHTML = '';
+        attacks.forEach(a => {
+            const li = document.createElement('li');
+            li.textContent = `${a.time} | ${a.ip} | ${a.endpoint} | ${a.type}`;
+            if (a.ip === '127.0.0.1' || a.ip === '::1') li.classList.add('localhost-ip');
+            const btn = document.createElement('button');
+            btn.textContent = 'Block';
+            btn.className = 'block-btn';
+            btn.onclick = () => blockIP(a.ip);
+            li.appendChild(btn);
+            ul.appendChild(li);
+        });
+    };
+    // Patch renderBlocked to highlight localhost
+    const origRenderBlocked = window.renderBlocked;
+    window.renderBlocked = async function() {
+        const ips = await fetch('/api/blocked').then(r => r.json());
+        const ul = document.getElementById('blocked-list');
+        ul.innerHTML = '';
+        ips.forEach(ip => {
+            const li = document.createElement('li');
+            li.textContent = ip + ' ';
+            if (ip === '127.0.0.1' || ip === '::1') li.classList.add('localhost-ip');
+            const btn = document.createElement('button');
+            btn.textContent = 'Unblock';
+            btn.className = 'unblock-btn';
+            btn.onclick = () => unblockIP(ip);
+            li.appendChild(btn);
+            ul.appendChild(li);
+        });
+    };
+    // Helper: detect if a request is an attack
+    function isAttack(log) {
+        let bodyStr = log.body;
+        try {
+            const parsed = JSON.parse(log.body);
+            bodyStr = Object.values(parsed).join(' ');
+        } catch (e) {}
+        const sqli = /('|--|;|\bOR\b|\bAND\b)/i.test(bodyStr) && log.endpoint.includes('login');
+        const xss = /<script|onerror=|onload=|<img|<svg/i.test(bodyStr) && log.endpoint.includes('comment');
+        return sqli || xss;
+    }
+    // Patch renderLogs to show only last 5, highlight attacks, and support modal
+    window.renderLogs = async function() {
+        const logs = await fetch('/api/logs').then(r => r.json());
+        const tbody = document.querySelector('#req-table tbody');
+        tbody.innerHTML = '';
+        logs.slice(0, 5).forEach(log => {
+            const tr = document.createElement('tr');
+            if (isAttack(log)) tr.classList.add('attack-row');
+            tr.innerHTML = `<td>${log.timestamp}</td><td>${log.ip}</td><td>${log.endpoint}</td><td>${log.method}</td><td>${log.body.slice(0, 40)}</td>`;
+            tbody.appendChild(tr);
+        });
+        // Fill modal with all logs
+        const modalTbody = document.querySelector('#modal-req-table tbody');
+        modalTbody.innerHTML = '';
+        logs.forEach(log => {
+            const tr = document.createElement('tr');
+            if (isAttack(log)) tr.classList.add('attack-row');
+            tr.innerHTML = `<td>${log.timestamp}</td><td>${log.ip}</td><td>${log.endpoint}</td><td>${log.method}</td><td>${log.body.slice(0, 40)}</td>`;
+            modalTbody.appendChild(tr);
+        });
+    };
+    // Modal logic
+    function showModal() {
+        document.getElementById('req-modal').style.display = 'flex';
+    }
+    function closeModal() {
+        document.getElementById('req-modal').style.display = 'none';
+    }
+    // Patch renderChart to highlight attack points
+    window.renderChart = async function() {
+        const stats = await fetch('/api/stats').then(r => r.json());
+        const logs = await fetch('/api/logs').then(r => r.json());
+        const ctx = document.getElementById('req-chart').getContext('2d');
+        const labels = stats.map(s => s.minute);
+        const data = stats.map(s => s.count);
+        // Find attack minutes
+        const attackMinutes = new Set();
+        logs.forEach(log => {
+            if (isAttack(log)) {
+                const min = log.timestamp.slice(11, 16);
+                attackMinutes.add(min);
+            }
+        });
+        if (window.reqChart) window.reqChart.destroy();
+        window.reqChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Requests/min',
+                    data,
+                    borderColor: '#2d3e50',
+                    fill: false,
+                    pointBackgroundColor: labels.map(l => attackMinutes.has(l) ? '#b71c1c' : '#1976d2'),
+                    pointRadius: labels.map(l => attackMinutes.has(l) ? 7 : 4),
+                    pointStyle: labels.map(l => attackMinutes.has(l) ? 'rectRot' : 'circle'),
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+    };
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('clear-attacks-btn').onclick = async function() {
+            if (confirm('Are you sure you want to clear all detected attacks? This cannot be undone.')) {
+                await fetch('/api/clear-attacks', { method: 'POST' });
+                renderAttacks();
+                renderLogs();
+                renderChart();
+            }
+        };
+    });
+    </script>
+</body>
+</html> 
