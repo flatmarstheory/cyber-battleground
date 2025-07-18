@@ -5,6 +5,19 @@ A full-stack, hands-on cybersecurity simulation platform for learning, teaching,
 
 ---
 
+### Vulnerable Web Application
+
+<img width="1513" height="1084" alt="Screenshot 2025-07-18 134946" src="https://github.com/user-attachments/assets/58efe8fb-2b8f-4bb5-a42b-9ef95dda87b0" />
+
+### Attack Dashboard
+
+<img width="1622" height="1066" alt="Screenshot 2025-07-18 134953" src="https://github.com/user-attachments/assets/bd4fab10-76c3-448e-aca8-8b7918fbf978" />
+
+### Defense Dashboard
+
+<img width="1772" height="1087" alt="Screenshot 2025-07-18 135003" src="https://github.com/user-attachments/assets/715e6799-abb0-4c56-aabb-df48bbe8bf56" />
+
+
 ## 🚩 What is Cyber Battleground?
 
 **Cyber Battleground** is an intentionally vulnerable web application and security lab. It provides a safe, interactive environment to:
@@ -63,20 +76,6 @@ A full-stack, hands-on cybersecurity simulation platform for learning, teaching,
 
 ---
 
-## 🏗️ System Architecture
-
-```mermaid
-flowchart TD
-    A[User/Attacker] --> B[Vulnerable Web App (Express/Node.js + SQLite)]
-    B --> C[Request Logging & Detection Middleware]
-    C --> D[Defense Dashboard (JS UI)]
-    A --> E[Attack Dashboard (JS UI)]
-    E --> F[Python Attack Scripts]
-    B --> G[Database: Users, Comments, Logs, Blocked IPs]
-```
-
----
-
 ## 🛠️ Getting Started
 
 ### 1. **Clone the Repo**
@@ -127,12 +126,6 @@ npx nodemon server.js
 - **Attack**: Use the Attack Dashboard to launch SQLi, brute-force, XSS, file upload, and command injection attacks (manual or auto).
 - **Defend**: Watch the Defense Dashboard detect, log, and block attacks in real time. Block/unblock IPs, see live stats, and learn how blue teams operate.
 - **Learn**: Every page is a mini-lesson in web security, with real code and real consequences.
-
----
-
-## 🖼️ Screenshots
-
-> _Add screenshots of the home page, attack dashboard, and defense dashboard here!_
 
 ---
 
