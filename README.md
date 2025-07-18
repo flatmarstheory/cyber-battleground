@@ -1,6 +1,7 @@
 # 🛡️ Cyber Battleground
 
 A full-stack, hands-on cybersecurity simulation platform for learning, teaching, and demonstrating both offensive and defensive web security.  
+
 **Built for education, demos, and real-world security awareness.**
 
 ---
